@@ -1,0 +1,15 @@
+---
+########################################################
+# Prepare to setup Elastic Stack
+########################################################
+
+- name: Import Elastic public signing key
+  shell: wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+- name: Install apt-transport-https
+  apt: name=apt-transport-https state=present
+
+- name: Add Elastic repo into source list
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    state: present

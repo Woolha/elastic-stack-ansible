@@ -1,0 +1,26 @@
+---
+########################################################
+# Set up Filebeat
+########################################################
+
+- name: Install filebeat from APT repository
+  apt: name=filebeat state=present force=true
+  update_cache: yes
+
+- name: Copy config
+  template: src=filebeatConf.j2 dest=/etc/filebeat/filebeat.yml
+
+- name: Force systemd to reread configs
+  systemd: daemon_reload=yes
+
+- name: Enable filebeat.service
+  systemd:
+    name: filebeat.service
+    enabled: yes
+
+- name: Start filebeat.service
+  systemd: name=filebeat.service state=restarted
+  become: true
+
+- name: Export Filebeat template
+  shell: filebeat export template > /tmp/filebeat.template.json

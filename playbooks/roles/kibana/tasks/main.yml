@@ -1,0 +1,23 @@
+---
+########################################################
+# Set up Kibana
+########################################################
+
+- name: Install kibana from APT repository
+  apt: name=kibana state=present force=yes
+  update_cache: yes
+
+- name: Copy config
+  template: src=kibanaConf.j2 dest=/etc/kibana/kibana.yml
+
+- name: Force systemd to reread configs
+  systemd: daemon_reload=yes
+
+- name: Enable kibana.service
+  systemd:
+    name: kibana.service
+    enabled: yes
+
+- name: Start kibana.service
+  systemd: name=kibana.service state=restarted
+  become: true

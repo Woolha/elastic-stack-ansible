@@ -1,0 +1,23 @@
+---
+########################################################
+# Set up ElasticSearch
+########################################################
+
+- name: Install elasticsearch from APT repository
+  apt: name=elasticsearch state=present
+  update_cache: yes
+
+- name: Copy config
+  template: src=elasticsearchConf.j2 dest=/etc/elasticsearch/elasticsearch.yml
+
+- name: Force systemd to reread configs
+  systemd: daemon_reload=yes
+
+- name: Enable elasticsearch.service
+  systemd:
+    name: elasticsearch.service
+    enabled: yes
+
+- name: Start elasticsearch.service
+  systemd: name=elasticsearch.service state=restarted
+  become: true
