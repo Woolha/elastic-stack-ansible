@@ -8,8 +8,8 @@
   remote_user: root
   become: true
   roles:
-#    - role: elastic_stack
-#    - role: filebeat
+    - role: elastic_stack
+    - role: filebeat
   tasks:
     # If you're using filebeat installed on another server(s), you need to load the filebeat template
     - name: Load Filebeat template
